@@ -14,12 +14,11 @@ export default defineConfig({
     }),
   ],
   build: {
-    minify: "terser",
+    minify: "esbuild",
     sourcemap: false,
     assetsInlineLimit: 4096,
     chunkSizeWarningLimit: 800,
     assetsDir: "assets",
-
     rollupOptions: {
       output: {
         manualChunks(id) {
