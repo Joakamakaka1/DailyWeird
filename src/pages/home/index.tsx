@@ -159,7 +159,7 @@ const Home = () => {
       </section>
 
       {/* ========== SECCIÓN STICKY + SCROLL ========== */}
-      <section className="relative w-full max-w-[1500px] mx-auto flex flex-col lg:flex-row gap-20 lg:gap-32 mt-24">
+      <section className="relative w-full max-w-[1500px] mx-auto flex flex-col lg:flex-row gap-20 lg:gap-32 mt-36">
         {/* Título sticky */}
         <div
           ref={stickyTitleRef}
