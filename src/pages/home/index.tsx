@@ -164,10 +164,11 @@ const Home = () => {
         {/* Título sticky */}
         <div
           ref={stickyTitleRef}
-          className="lg:sticky lg:top-80 lg:self-start lg:w-1/3 h-fit border-l-4 border-lime-700 pl-6"
+          className="lg:sticky lg:top-80 lg:self-start lg:w-1/3 h-fit pl-6"
+          style={{ borderLeft: "3px solid #aaff00" }}
         >
           <h2
-            className="text-[42px] sm:text-[64px] font-['Crimson_Text'] leading-tight mb-6 pl-6"
+            className="text-[42px] sm:text-[64px] font-['Crimson_Text'] leading-tight mb-6"
             style={{ fontFamily: "BigBesty" }}
           >
             {data?.title}
