@@ -124,10 +124,11 @@ const Home = () => {
   return (
     <main className="w-full max-w-[1920px] mx-auto px-4 sm:px-8 pb-10 bg-[#131516] min-h-screen text-white">
       {/* ========== HEADER ========== */}
-      <header className="w-full max-w-[1500px] flex justify-between items-center py-6 mx-auto">
+      <header className="w-full max-w-[1500px] flex items-center py-6 mx-auto">
+        <img src="/images/Logo2.webp" alt="" className="w-18 mb-4 mr-4" />
         <h1
-          className="text-white text-2xl sm:text-3xl tracking-tight border-b-4 border-lime-700 pb-1"
-          style={{ fontFamily: "BigBesty" }}
+          className="text-white text-2xl sm:text-3xl pb-2"
+          style={{ fontFamily: "BigBesty", borderBottom: "3px solid #aaff00" }}
         >
           Daily Weird
         </h1>
@@ -166,8 +167,8 @@ const Home = () => {
           className="lg:sticky lg:top-80 lg:self-start lg:w-1/3 h-fit border-l-4 border-lime-700 pl-6"
         >
           <h2
-            className="text-[42px] sm:text-[64px] font-['Crimson_Text'] leading-tight mb-6 "
-            style={{ fontFamily: "BigBesty" }}
+            className="text-[42px] sm:text-[64px] font-['Crimson_Text'] leading-tight mb-6 pl-6"
+            style={{ fontFamily: "BigBesty", borderLeft: "3px solid #aaff00" }}
           >
             {data?.title}
           </h2>
