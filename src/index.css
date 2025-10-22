@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "BigBesty";
+  src: url("/fonts/BigBesty.woff2") format("woff2");
+  font-display: swap;
+}
