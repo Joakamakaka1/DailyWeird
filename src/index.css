@@ -2,14 +2,18 @@
 
 @font-face {
   font-family: "BigBesty";
-  src: url("/fonts/BigBesty.woff2") format("woff2");
-  font-display: swap;
+  src: url("../public/fonts/Bigbesty.ttf") format("truetype");
 }
 
+/* @font-face {
+  font-family: "Super Trend";
+  src: url("../public/fonts/Super\ Trend.ttf") format("truetype");
+} */
+
 .font-bigbesty {
-  font-family: "BigBesty", sans-serif;
+  font-family: "BigBesty", sans-serif !important;
 }
 
 .font-roboto {
-  font-family: "Roboto", sans-serif;
+  font-family: "Roboto", sans-serif !important;
 }
