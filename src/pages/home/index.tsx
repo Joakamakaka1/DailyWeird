@@ -5,6 +5,7 @@ import "lenis/dist/lenis.css";
 import { useEffect, useRef, useState } from "react";
 import type { DailyWeird } from "../../model/DailyWeird";
 import api from "../../api/api";
+import ItemModalImage from "../../components/itemModalImage";
 
 // Registrar ScrollTrigger
 gsap.registerPlugin(ScrollTrigger);
@@ -121,6 +122,22 @@ const Home = () => {
     fetchData();
   }, []);
 
+  // ========= MODAL IMAGE =========
+  const [selectedItem, setSelectedItem] = useState<{
+    name: string;
+    image_url: string;
+  } | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = (item: { name: string; image_url: string }) => {
+    setSelectedItem(item);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedItem(null);
+  };
   return (
     <main className="w-full max-w-[1920px] mx-auto px-4 sm:px-8 pb-10 bg-[#131516] min-h-screen text-white">
       {/* ========== HEADER ========== */}
@@ -142,20 +159,38 @@ const Home = () => {
         >
           {data?.title}
         </h2>
+
         <p
           ref={heroDescriptionRef}
           className="text-[#dbd8d3] text-base sm:text-lg font-roboto max-w-2xl mx-auto mb-6"
         >
           {data?.description}
         </p>
-        <img
-          src={data?.image_url}
-          alt="Foto Random"
-          className="w-full max-w-3xl rounded-3xl shadow-md border border-gray-200 object-cover aspect-video mx-auto"
-          fetchPriority="high"
-          loading="eager"
-          decoding="async"
-        />
+
+        <div className="relative w-full max-w-3xl mx-auto aspect-video rounded-3xl overflow-hidden border border-gray-200 shadow-md bg-[#1e2021]">
+          {/* Loader centrado */}
+          {!data?.image_url && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-[#c5ff75] font-roboto animate-pulse">
+              <div className="w-10 h-10 border-4 border-[#c5ff75]/40 border-t-[#c5ff75] rounded-full animate-spin mb-3"></div>
+              <p className="text-sm">Cargando imagen...</p>
+            </div>
+          )}
+
+          {data?.image_url && (
+            <img
+              src={data.image_url}
+              alt="Foto Random"
+              className="w-full h-full object-cover transition-opacity duration-700 opacity-0"
+              onLoad={(e) => {
+                const img = e.currentTarget;
+                gsap.to(img, { opacity: 1, duration: 0.8, ease: "power2.out" });
+              }}
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
+            />
+          )}
+        </div>
       </section>
 
       {/* ========== SECCIÓN STICKY + SCROLL ========== */}
@@ -182,9 +217,10 @@ const Home = () => {
               ref={(el: HTMLDivElement | null) => {
                 if (el) cardsRef.current[idx] = el;
               }}
+              onClick={() => handleOpenModal(item)}
               onMouseEnter={handleCardEnter}
               onMouseLeave={handleCardLeave}
-              className="bg-[#1e2021] border border-[#7a7164]/40 p-8 rounded-2xl shadow-sm cursor-pointer"
+              className="bg-[#1e2021] border border-[#7a7164]/40 p-8 rounded-2xl shadow-sm cursor-pointer hover:border-[#c5ff75]/60 transition-all"
             >
               {" "}
               <h3
@@ -248,6 +284,15 @@ const Home = () => {
           day.
         </p>
       </footer>
+
+      {isModalOpen && selectedItem && (
+        <ItemModalImage
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          title={selectedItem.name}
+          imageUrl={selectedItem.image_url}
+        />
+      )}
     </main>
   );
 };
