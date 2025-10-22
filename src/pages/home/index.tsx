@@ -168,7 +168,7 @@ const Home = () => {
         >
           <h2
             className="text-[42px] sm:text-[64px] font-['Crimson_Text'] leading-tight mb-6 pl-6"
-            style={{ fontFamily: "BigBesty", borderLeft: "3px solid #aaff00" }}
+            style={{ fontFamily: "BigBesty" }}
           >
             {data?.title}
           </h2>
