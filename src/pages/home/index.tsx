@@ -127,8 +127,8 @@ const Home = () => {
       <header className="w-full max-w-[1500px] flex items-center py-6 mx-auto">
         <img src="/images/Logo2.webp" alt="" className="w-18 mb-4 mr-4" />
         <h1
-          className="text-white text-2xl sm:text-3xl pb-2"
-          style={{ fontFamily: "BigBesty", borderBottom: "3px solid #aaff00" }}
+          className="text-white text-2xl sm:text-3xl pb-2 font-bigbesty"
+          style={{ borderBottom: "3px solid #aaff00" }}
         >
           Daily Weird
         </h1>
@@ -138,14 +138,13 @@ const Home = () => {
       <section className="w-full text-center mt-16 mb-10 px-4 py-4">
         <h2
           ref={heroTitleRef}
-          className="text-white text-[42px] sm:text-[58px] font-['Crimson_Text'] leading-tight mb-10"
-          style={{ fontFamily: "BigBesty" }}
+          className="text-white text-[42px] sm:text-[58px] font-bigbesty leading-tight mb-10"
         >
           {data?.title}
         </h2>
         <p
           ref={heroDescriptionRef}
-          className="text-[#dbd8d3] text-base sm:text-lg font-['Roboto'] max-w-2xl mx-auto mb-6"
+          className="text-[#dbd8d3] text-base sm:text-lg font-roboto max-w-2xl mx-auto mb-6"
         >
           {data?.description}
         </p>
@@ -167,13 +166,10 @@ const Home = () => {
           className="lg:sticky lg:top-80 lg:self-start lg:w-1/3 h-fit pl-6"
           style={{ borderLeft: "3px solid #aaff00" }}
         >
-          <h2
-            className="text-[42px] sm:text-[64px] font-['Crimson_Text'] leading-tight mb-6"
-            style={{ fontFamily: "BigBesty" }}
-          >
+          <h2 className="text-[42px] sm:text-[64px] font-bigbesty leading-tight mb-6">
             {data?.title}
           </h2>
-          <p className="text-[#dbd8d3] text-base sm:text-lg font-['Roboto']">
+          <p className="text-[#dbd8d3] text-base sm:text-lg font-roboto">
             {data?.description}
           </p>
         </div>
@@ -195,13 +191,13 @@ const Home = () => {
                 ref={(el: HTMLHeadingElement | null) => {
                   if (el) numbersRef.current[idx] = el;
                 }}
-                className="text-[#c5ff75] font-['Roboto'] text-sm mb-1"
+                className="text-[#c5ff75] font-roboto text-sm mb-1"
               >
                 {" "}
                 #{item.rank}{" "}
               </h3>{" "}
-              <p className="text-white text-xl font-['Roboto']">{item.name}</p>{" "}
-              <p className="text-[#dbd8d3] text-sm mt-2 font-['Roboto']">
+              <p className="text-white text-xl font-roboto">{item.name}</p>{" "}
+              <p className="text-[#dbd8d3] text-sm mt-2 font-roboto">
                 {" "}
                 {item.description}{" "}
               </p>{" "}
@@ -213,34 +209,31 @@ const Home = () => {
       {/* ========== SECCIÓN FINAL ========== */}
       <section className="w-full max-w-[1500px] mx-auto mt-30 text-center">
         <div className="bg-gradient-to-r from-[#1e2021] to-[#2a2d2e] border border-[#7a7164]/40 p-12 rounded-2xl shadow-lg">
-          <h3
-            className="text-white text-2xl sm:text-3xl font-['Crimson_Text'] mb-6"
-            style={{ fontFamily: "BigBesty" }}
-          >
+          <h3 className="text-white text-2xl sm:text-3xl font-bigbesty mb-6">
             Interested in more weirdness?
           </h3>
 
-          <p className="text-[#dbd8d3] text-lg sm:text-xl font-['Roboto'] max-w-2xl mx-auto mb-8 leading-relaxed">
+          <p className="text-[#dbd8d3] text-lg sm:text-xl font-roboto max-w-2xl mx-auto mb-8 leading-relaxed">
             Discover daily absurd products, deceptive food items, and objects
             that defy logic. Your daily dose of "why would someone do this?"
             awaits.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
-            <button className="cursor-pointer bg-[#c5ff75] text-[#131516] px-8 py-3 rounded-lg font-['Roboto'] font-semibold shadow-lg">
+            <button className="cursor-pointer bg-[#c5ff75] text-[#131516] px-8 py-3 rounded-lg font-roboto font-semibold shadow-lg">
               Subscribe to the weirdness
             </button>
-            <button className="cursor-pointer border border-[#c5ff75] text-[#c5ff75] px-8 py-3 rounded-lg font-['Roboto'] font-semibold hover:bg-[#c5ff75] hover:text-[#131516] transition-all duration-300">
+            <button className="cursor-pointer border border-[#c5ff75] text-[#c5ff75] px-8 py-3 rounded-lg font-roboto font-semibold hover:bg-[#c5ff75] hover:text-[#131516] transition-all duration-300">
               Share weirdness
             </button>
           </div>
 
           <div className="flex justify-center gap-6 mt-8">
-            <span className="text-[#7a7164] font-['Roboto'] text-sm flex items-center gap-2">
+            <span className="text-[#7a7164] font-roboto text-sm flex items-center gap-2">
               <span className="w-2 h-2 bg-[#c5ff75] rounded-full"></span>
               New weirdness every day
             </span>
-            <span className="text-[#7a7164] font-['Roboto'] text-sm flex items-center gap-2">
+            <span className="text-[#7a7164] font-roboto text-sm flex items-center gap-2">
               <span className="w-2 h-2 bg-[#c5ff75] rounded-full"></span>
               100% not in common sense
             </span>
@@ -250,7 +243,7 @@ const Home = () => {
 
       {/* ========== FOOTER ========== */}
       <footer className="w-full max-w-[1500px] mx-auto mt-20 flex flex-col items-center gap-4">
-        <p className="text-xs text-[#c5ff75] font-['Roboto']">
+        <p className="text-xs text-[#c5ff75] font-roboto">
           © {new Date().getFullYear()} DailyWeird.top — All the weird, every
           day.
         </p>

@@ -2,7 +2,7 @@ const NotFound = () => {
   return (
     <div className="w-full h-screen flex flex-col justify-center items-center bg-[#131516] text-white">
       <h1
-        className="text-6xl font-['BigBesty'] mb-4"
+        className="text-6xl font-bigbesty mb-4"
         style={{ borderBottom: "3px solid #aaff00" }}
       >
         404 - Page Not Found
