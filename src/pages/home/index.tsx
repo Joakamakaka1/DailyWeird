@@ -152,7 +152,7 @@ const Home = () => {
   };
 
   return (
-    <main className="w-full max-w-[1920px] mx-auto px-4 sm:px-8 pb-10 bg-[#131516] min-h-screen text-white">
+    <main className="w-full mx-auto px-4 sm:px-8 pb-10 bg-[#131516] min-h-screen text-white">
       {/* ========== HEADER ========== */}
       <header className="w-full max-w-[1500px] flex items-center py-6 mx-auto">
         <img src="/images/Logo2.webp" alt="" className="w-18 mb-4 mr-4" />
