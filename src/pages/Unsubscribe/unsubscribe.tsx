@@ -48,7 +48,7 @@ const EmailModalUnsubscribe = () => {
   }, []);
 
   return (
-    <div className="fixed inset-0 bg-[#131516] backdrop-blur-sm flex justify-center items-center z-[999]">
+    <div className="fixed text-white inset-0 bg-[#131516] backdrop-blur-sm flex justify-center items-center z-[999]">
       <div
         className="bg-[#1e2021] rounded-xl shadow-md p-8 max-w-md relative"
         onClick={(e) => e.stopPropagation()}
