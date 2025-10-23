@@ -33,53 +33,84 @@ const EmailModalSubscribe: React.FC<ModalProps> = ({ isOpen, onClose }) => {
     return () => window.removeEventListener("keydown", handleKey);
   }, [onClose]);
 
-  // Login con Google
+  // Bloquear scroll al abrir modal
+  useEffect(() => {
+    if (isOpen) {
+      const scrollY = window.scrollY;
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.overflowY = "scroll";
+      document.body.style.width = "100%";
+    } else {
+      const scrollY = document.body.style.top;
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.overflowY = "";
+      document.body.style.width = "";
+      window.scrollTo(0, parseInt(scrollY || "0") * -1);
+    }
+  }, [isOpen]);
+
+  // Login con Google (abre popup)
   const handleGoogleLogin = async () => {
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
+      const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: window.location.origin, // redirige de nuevo al sitio
+          redirectTo: `${window.location.origin}/auth/callback`, // ← ruta callback
+          skipBrowserRedirect: true,
+          queryParams: {
+            access_type: "offline",
+            prompt: "consent",
+          },
         },
       });
+
       if (error) throw error;
+
+      if (data?.url) {
+        window.open(
+          data.url,
+          "_blank",
+          "width=500,height=600,menubar=no,toolbar=no,status=no"
+        );
+      }
     } catch (err) {
       console.error("Error al iniciar sesión con Google:", err);
     }
   };
 
-  // Al volver del login, guardar el email si hay sesión activa
+  // Escuchar el mensaje del popup (cuando login completo)
   useEffect(() => {
-    const checkSession = async () => {
-      const { data } = await supabase.auth.getUser();
-      const userEmail = data?.user?.email;
-      if (!userEmail) return;
+    const handleMessage = async (event: MessageEvent) => {
+      if (event.origin !== window.location.origin) return;
+      if (event.data?.type === "auth-success") {
+        const userEmail = event.data.email;
 
-      try {
-        // Inserta en Supabase (vía tu backend n8n)
-        await api.post("/dailyweird-send-email", {
-          email: userEmail,
-          created_at: new Date().toISOString(),
-          verified: true,
-        });
+        try {
+          // Guardar email en tu tabla subscribers y enviar correo de bienvenida
+          await api.post("/dailyweird-send-email", {
+            email: userEmail,
+            created_at: new Date().toISOString(),
+            verified: true,
+          });
 
-        // Enviar confirmación
-        await api.post("/dailyweird-send-confirmation", { email: userEmail });
-
-        setEmailSend({ email: userEmail } as EmailDailyWeird);
-      } catch (error) {
-        console.error("Error guardando email tras login Google:", error);
+          setEmailSend({ email: userEmail } as EmailDailyWeird);
+        } catch (error) {
+          console.error("Error al enviar el correo:", error);
+        }
       }
     };
 
-    checkSession();
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
   }, []);
 
   if (!isOpen) return null;
 
   return (
     <div
-      className="fixed inset-0 bg-[#131516] backdrop-blur-sm flex justify-center items-center z-[999]"
+      className="fixed inset-0 backdrop-blur-sm flex justify-center items-center z-[999]"
       onClick={onClose}
     >
       <div
@@ -120,12 +151,12 @@ const EmailModalSubscribe: React.FC<ModalProps> = ({ isOpen, onClose }) => {
           </svg>
           Continue with Google
         </button>
+        {emailSend && (
+          <p className="text-green-400 mt-4 text-sm text-center">
+            Subscribed successfully!
+          </p>
+        )}
       </div>
-      {emailSend && (
-        <p className="text-green-400 mt-4 text-sm">
-          Subscribed successfully with {emailSend.email}!
-        </p>
-      )}
     </div>
   );
 };

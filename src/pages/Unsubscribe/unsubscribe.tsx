@@ -8,13 +8,27 @@ const EmailModalUnsubscribe = () => {
   //  Login con Google
   const handleGoogleLogin = async () => {
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
+      const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/unsubscribe`,
+          redirectTo: `${window.location.origin}/auth/callback`, // ← ruta callback
+          skipBrowserRedirect: true,
+          queryParams: {
+            access_type: "offline",
+            prompt: "consent",
+          },
         },
       });
+
       if (error) throw error;
+
+      if (data?.url) {
+        window.open(
+          data.url,
+          "_blank",
+          "width=500,height=600,menubar=no,toolbar=no,status=no"
+        );
+      }
     } catch (err) {
       console.error("Error al iniciar sesión con Google:", err);
     }
@@ -22,29 +36,28 @@ const EmailModalUnsubscribe = () => {
 
   //  Una vez el usuario haya iniciado sesión → eliminar automáticamente
   useEffect(() => {
-    const checkSessionAndUnsubscribe = async () => {
-      const { data } = await supabase.auth.getUser();
-      const userEmail = data?.user?.email;
-      if (!userEmail) return;
+    const checkSessionAndUnsubscribe = async (event: MessageEvent) => {
+      if (event.origin !== window.location.origin) return;
+      if (event.data?.type === "auth-success") {
+        const userEmail = event.data.email;
 
-      try {
-        // Eliminar email de tu tabla subscribers
-        await api.delete("/dailyweird-delete-email", {
-          data: { email: userEmail },
-        });
+        try {
+          // Guardar email en tu tabla subscribers y enviar correo de bienvenida
+          await api.delete("/dailyweird-delete-email", {
+            data: { email: userEmail },
+          });
 
-        // Enviar correo de despedida
-        await api.post("/dailyweird-send-goodbye", {
-          email: userEmail,
-        });
-
-        setUnsubscribed(true);
-      } catch (error) {
-        console.error("Error unsubscribing email:", error);
+          setUnsubscribed(true);
+          window.location.href = "/";
+        } catch (error) {
+          console.error("Error al enviar el correo:", error);
+        }
       }
     };
 
-    checkSessionAndUnsubscribe();
+    window.addEventListener("message", checkSessionAndUnsubscribe);
+    return () =>
+      window.removeEventListener("message", checkSessionAndUnsubscribe);
   }, []);
 
   return (
