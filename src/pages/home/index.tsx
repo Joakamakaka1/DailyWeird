@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import type { DailyWeird } from "../../model/DailyWeird";
 import api from "../../api/api";
 import ItemModalImage from "../../components/itemModalImage";
+import EmailModalSubscribe from "../../components/emailModalSubscribe";
 
 // Registrar ScrollTrigger
 gsap.registerPlugin(ScrollTrigger);
@@ -138,6 +139,18 @@ const Home = () => {
     setIsModalOpen(false);
     setSelectedItem(null);
   };
+
+  // ========= MODAL SUBSCRIBE FORM =========
+  const [isSubscribeModalOpen, setIsSubscribeModalOpen] = useState(false);
+
+  const handleOpenSubscribeModal = () => {
+    setIsSubscribeModalOpen(true);
+  };
+
+  const handleCloseSubscribeModal = () => {
+    setIsSubscribeModalOpen(false);
+  };
+
   return (
     <main className="w-full max-w-[1920px] mx-auto px-4 sm:px-8 pb-10 bg-[#131516] min-h-screen text-white">
       {/* ========== HEADER ========== */}
@@ -164,7 +177,9 @@ const Home = () => {
           ref={heroDescriptionRef}
           className="text-[#dbd8d3] text-base sm:text-lg font-roboto max-w-2xl mx-auto mb-6"
         >
-          {data?.description}
+          Discover the weirdest products and items curated daily to baffle your
+          mind. From bizarre gadgets to peculiar food items, we bring you a
+          daily dose of the unusual and extraordinary.
         </p>
 
         <div className="relative w-full max-w-3xl mx-auto aspect-video rounded-3xl overflow-hidden border border-gray-200 shadow-md bg-[#1e2021]">
@@ -256,7 +271,10 @@ const Home = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
-            <button className="cursor-pointer bg-[#c5ff75] text-[#131516] px-8 py-3 rounded-lg font-roboto font-semibold shadow-lg">
+            <button
+              className="cursor-pointer bg-[#c5ff75] text-[#131516] px-8 py-3 rounded-lg font-roboto font-semibold shadow-lg"
+              onClick={handleOpenSubscribeModal}
+            >
               Subscribe to the weirdness
             </button>
             <button className="cursor-pointer border border-[#c5ff75] text-[#c5ff75] px-8 py-3 rounded-lg font-roboto font-semibold hover:bg-[#c5ff75] hover:text-[#131516] transition-all duration-300">
@@ -293,6 +311,11 @@ const Home = () => {
           imageUrl={selectedItem.image_url}
         />
       )}
+
+      <EmailModalSubscribe
+        isOpen={isSubscribeModalOpen}
+        onClose={handleCloseSubscribeModal}
+      />
     </main>
   );
 };

@@ -12,3 +12,10 @@ export interface DailyWeird {
     image_url: string;
   }[];
 }
+
+export interface EmailDailyWeird {
+  id: number;
+  created_at: string;
+  email: string;
+  verified: boolean;
+}
