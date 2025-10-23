@@ -13,6 +13,7 @@
   "dependencies": {
     "@react-email/components": "0.5.7",
     "@react-email/render": "^1.4.0",
+    "@supabase/supabase-js": "^2.76.1",
     "@tailwindcss/vite": "^4.1.14",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
