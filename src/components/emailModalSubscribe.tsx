@@ -93,8 +93,8 @@ const EmailModalSubscribe: React.FC<ModalProps> = ({ isOpen, onClose }) => {
 
         try {
           const response = await api.post("/dailyweird-send-email", {
-            email: userEmail,
             created_at: new Date().toISOString(),
+            email: userEmail,
             verified: true,
           });
 

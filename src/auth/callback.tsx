@@ -25,7 +25,7 @@ export default function AuthCallback() {
   }, []);
 
   return (
-    <p className="text-white text-2xl font-bigbesty text-center">
+    <p className="text-white text-2xl font-bigbesty flex justify-center items-center h-screen">
       Logging in...
     </p>
   );

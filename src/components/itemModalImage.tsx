@@ -105,7 +105,7 @@ const ItemModalImage: React.FC<ModalProps> = ({
           {!isImageLoaded && (
             <div className="absolute inset-0 flex flex-col items-center justify-center text-[#c5ff75] font-roboto animate-pulse pointer-events-none">
               <div className="w-10 h-10 border-4 border-[#c5ff75]/40 border-t-[#c5ff75] rounded-full animate-spin mb-3"></div>
-              <p className="text-xl font-bigbesty">Cargando imagen...</p>
+              <p className="text-xl font-bigbesty">Loading image...</p>
             </div>
           )}
           <img
