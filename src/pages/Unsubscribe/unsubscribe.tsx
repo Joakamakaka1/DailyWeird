@@ -62,7 +62,7 @@ const EmailModalUnsubscribe = () => {
         {/* BOTÓN GOOGLE */}
         <button
           onClick={handleGoogleLogin}
-          className="cursor-pointer text-white justify-center flex gap-2 items-center bg-[#c5ff75] px-4 py-2 rounded-lg transition-all ease-in duration-200 mt-8 w-full "
+          className="cursor-pointer text-black justify-center flex gap-2 items-center bg-[#c5ff75] px-4 py-2 rounded-lg transition-all ease-in duration-200 mt-8 w-full "
         >
           <svg
             viewBox="0 0 48 48"
