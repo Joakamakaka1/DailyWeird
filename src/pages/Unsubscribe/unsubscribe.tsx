@@ -48,7 +48,6 @@ const EmailModalUnsubscribe = () => {
           });
 
           setUnsubscribed(true);
-          window.location.href = "/";
         } catch (error) {
           console.error("Error al enviar el correo:", error);
         }
@@ -101,10 +100,16 @@ const EmailModalUnsubscribe = () => {
           </svg>
           Continue with Google
         </button>
+        {unsubscribed && (
+          <p className="text-red-500 mt-3 text-sm">
+            You have been unsubscribed. Click{" "}
+            <a href="/" className="underline">
+              here
+            </a>{" "}
+            to return to the homepage.
+          </p>
+        )}
       </div>
-      {unsubscribed && (
-        <p className="text-red-500 mt-3 text-sm">You have been unsubscribed.</p>
-      )}
     </div>
   );
 };
