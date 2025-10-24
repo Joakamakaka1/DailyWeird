@@ -1,67 +1,40 @@
 // ==== Proxy universal para n8n ====
 
-export const config = {
-  runtime: "edge",
-};
+export default async function handler(req, res) {
+  const { path } = req.query;
 
-export default async function handler(req) {
-  const url = new URL(req.url);
-  const path = url.searchParams.get("path");
+  if (!path) {
+    return res.status(400).json({ error: "Missing 'path' parameter" });
+  }
 
   const N8N_BASE_URL = process.env.N8N_BASE_URL;
   const N8N_TOKEN = process.env.N8N_TOKEN;
 
-  // --- Validación de entorno ---
-  if (!N8N_BASE_URL || !N8N_TOKEN) {
-    return new Response(
-      JSON.stringify({ error: "Faltan variables de entorno en Vercel" }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+  if (!N8N_TOKEN) {
+    console.error("⚠️ Falta la variable de entorno N8N_TOKEN");
+    return res.status(500).json({ error: "Server misconfiguration" });
   }
 
-  // --- Construcción de la URL final (n8n) ---
-  const targetUrl = `${N8N_BASE_URL.replace(/\/$/, "")}/webhook/${path}`;
-
   try {
-    const n8nResponse = await fetch(targetUrl, {
-      method: req.method,
+    const response = await fetch(`${N8N_BASE_URL}${path}`, {
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${N8N_TOKEN}`,
-        "User-Agent": "DailyWeirdFrontend/1.0 (+https://dailyweird.top)",
-      },
-      body: req.method === "GET" ? undefined : await req.text(),
-    });
-
-    const contentType =
-      n8nResponse.headers.get("content-type") || "application/json";
-    const body = await n8nResponse.text();
-
-    return new Response(body, {
-      status: n8nResponse.status,
-      headers: {
-        "Content-Type": contentType,
-        "Cache-Control":
-          "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0",
-        Pragma: "no-cache",
-        Expires: "0",
       },
     });
-  } catch (err) {
-    console.error("❌ Error al conectar con n8n:", err);
-    return new Response(
-      JSON.stringify({
-        error: "Error al conectar con n8n",
-        detail: err.message,
-        stack: err.stack,
-      }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+
+    if (!response.ok) {
+      const text = await response.text();
+      console.error(`❌ n8n error ${response.status}: ${text}`);
+      return res
+        .status(response.status)
+        .json({ error: "Error al obtener datos de n8n" });
+    }
+
+    // Devuelve el JSON directamente
+    const data = await response.json();
+    return res.status(200).json(data);
+  } catch (error) {
+    console.error("❌ Error al conectar con n8n:", error);
+    return res.status(500).json({ error: "Internal server error" });
   }
 }
