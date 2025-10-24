@@ -13,6 +13,7 @@ const EmailModalSubscribe: React.FC<ModalProps> = ({ isOpen, onClose }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const [emailSend, setEmailSend] = useState<EmailDailyWeird | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Animación de entrada
   useEffect(() => {
@@ -90,6 +91,7 @@ const EmailModalSubscribe: React.FC<ModalProps> = ({ isOpen, onClose }) => {
       if (event.data?.type === "auth-success") {
         const userEmail = event.data.email;
         setErrorMessage(null);
+        setIsLoading(true);
 
         try {
           const response = await api.post("/dailyweird-send-email", {
@@ -104,6 +106,7 @@ const EmailModalSubscribe: React.FC<ModalProps> = ({ isOpen, onClose }) => {
               response.data?.error ||
               "This email is already registered. Try again";
             setErrorMessage(msg);
+            setIsLoading(false);
             return;
           }
 
@@ -115,6 +118,8 @@ const EmailModalSubscribe: React.FC<ModalProps> = ({ isOpen, onClose }) => {
             error.message ||
             "An unexpected error occurred.";
           setErrorMessage(msg);
+        } finally {
+          setIsLoading(false);
         }
       }
     };
@@ -181,17 +186,21 @@ const EmailModalSubscribe: React.FC<ModalProps> = ({ isOpen, onClose }) => {
           Continue with Google
         </button>
 
-        {emailSend && (
+        {/* MENSAJES */}
+        {isLoading ? (
+          <div className="flex flex-col items-center mt-6 text-[#c5ff75] font-roboto animate-pulse">
+            <div className="w-8 h-8 border-4 border-[#c5ff75]/40 border-t-[#c5ff75] rounded-full animate-spin mb-3"></div>
+            <p className="text-sm">Adding your Gmail...</p>
+          </div>
+        ) : emailSend ? (
           <p className="text-green-400 mt-4 text-sm text-center">
             Subscribed successfully!
           </p>
-        )}
-
-        {errorMessage && (
+        ) : errorMessage ? (
           <p className="text-red-400 mt-4 text-sm text-center">
             {errorMessage}
           </p>
-        )}
+        ) : null}
       </div>
     </div>
   );

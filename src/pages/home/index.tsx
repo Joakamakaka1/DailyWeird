@@ -151,6 +151,34 @@ const Home = () => {
     setIsSubscribeModalOpen(false);
   };
 
+  // ========= SHARING =========
+
+  const [shareText, setShareText] = useState("Share weirdness");
+
+  const handleShare = async () => {
+    const shareData = {
+      title: "Daily Weird",
+      text: "Discover the weirdest products and items curated daily!",
+      url: window.location.origin,
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        console.error("Error sharing:", err);
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(shareData.url);
+        setShareText("Copied!");
+      } catch (err) {
+        console.error("Failed to copy link:", err);
+        setShareText("Error");
+      }
+    }
+  };
+
   return (
     <main className="w-full mx-auto px-4 sm:px-8 pb-10 bg-[#131516] min-h-screen text-white">
       {/* ========== HEADER ========== */}
@@ -277,8 +305,11 @@ const Home = () => {
             >
               Subscribe to the weirdness
             </button>
-            <button className="cursor-pointer border border-[#c5ff75] text-[#c5ff75] px-8 py-3 rounded-lg font-roboto font-semibold hover:bg-[#c5ff75] hover:text-[#131516] transition-all duration-300">
-              Share weirdness
+            <button
+              onClick={handleShare}
+              className="cursor-pointer border border-[#c5ff75] text-[#c5ff75] px-8 py-3 rounded-lg font-roboto font-semibold hover:bg-[#c5ff75] hover:text-[#131516] transition-all duration-300"
+            >
+              {shareText}
             </button>
           </div>
 

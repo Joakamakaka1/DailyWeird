@@ -5,6 +5,7 @@ import supabase from "../../db/supabaseClient";
 const EmailModalUnsubscribe = () => {
   const [unsubscribed, setUnsubscribed] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // Login con Google
   const handleGoogleLogin = async () => {
@@ -44,6 +45,7 @@ const EmailModalUnsubscribe = () => {
       if (event.data?.type === "auth-success") {
         const userEmail = event.data.email;
         setErrorMessage(null);
+        setIsLoading(true);
 
         try {
           const response = await api.delete("/dailyweird-delete-email", {
@@ -55,6 +57,7 @@ const EmailModalUnsubscribe = () => {
               response.data?.error ||
               "This email was not found in our list. Try again.";
             setErrorMessage(msg);
+            setIsLoading(false);
             return;
           }
 
@@ -66,6 +69,8 @@ const EmailModalUnsubscribe = () => {
             error.message ||
             "An unexpected error occurred.";
           setErrorMessage(msg);
+        } finally {
+          setIsLoading(false);
         }
       }
     };
@@ -144,7 +149,12 @@ const EmailModalUnsubscribe = () => {
         </button>
 
         {/* MENSAJES */}
-        {unsubscribed && (
+        {isLoading ? (
+          <div className="flex flex-col items-center mt-6 text-[#c5ff75] font-roboto animate-pulse">
+            <div className="w-8 h-8 border-4 border-[#c5ff75]/40 border-t-[#c5ff75] rounded-full animate-spin mb-3"></div>
+            <p className="text-sm">Removing your Gmail...</p>
+          </div>
+        ) : unsubscribed ? (
           <p className="text-red-500 mt-3 text-sm text-center">
             You have been unsubscribed. Click{" "}
             <a href="/" className="underline">
@@ -152,13 +162,11 @@ const EmailModalUnsubscribe = () => {
             </a>{" "}
             to return to the homepage.
           </p>
-        )}
-
-        {errorMessage && (
+        ) : errorMessage ? (
           <p className="text-yellow-400 mt-3 text-sm text-center">
             {errorMessage}
           </p>
-        )}
+        ) : null}
       </div>
     </div>
   );
