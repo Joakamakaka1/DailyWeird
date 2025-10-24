@@ -37,6 +37,7 @@ export default async (req) => {
       headers: {
         "Content-Type":
           response.headers.get("content-type") || "application/json",
+        "Cache-Control": "no-store",
       },
     });
   } catch (err) {
