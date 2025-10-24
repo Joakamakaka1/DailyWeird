@@ -4,7 +4,7 @@ export const config = {
   runtime: "edge",
 };
 
-export default async (req) => {
+export default async function handler(req) {
   const url = new URL(req.url);
   const path = url.searchParams.get("path");
 
@@ -15,15 +15,18 @@ export default async (req) => {
   if (!N8N_BASE_URL || !N8N_TOKEN) {
     return new Response(
       JSON.stringify({ error: "Faltan variables de entorno en Vercel" }),
-      { status: 500 }
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
     );
   }
 
-  // --- Construcción de URL final ---
+  // --- Construcción de la URL final (n8n) ---
   const targetUrl = `${N8N_BASE_URL.replace(/\/$/, "")}/webhook/${path}`;
 
   try {
-    const response = await fetch(targetUrl, {
+    const n8nResponse = await fetch(targetUrl, {
       method: req.method,
       headers: {
         "Content-Type": "application/json",
@@ -33,13 +36,14 @@ export default async (req) => {
       body: req.method === "GET" ? undefined : await req.text(),
     });
 
-    const text = await response.text();
+    const contentType =
+      n8nResponse.headers.get("content-type") || "application/json";
+    const body = await n8nResponse.text();
 
-    return new Response(text, {
-      status: response.status,
+    return new Response(body, {
+      status: n8nResponse.status,
       headers: {
-        "Content-Type":
-          response.headers.get("content-type") || "application/json",
+        "Content-Type": contentType,
         "Cache-Control":
           "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0",
         Pragma: "no-cache",
@@ -47,13 +51,16 @@ export default async (req) => {
       },
     });
   } catch (err) {
-    console.error("Error al conectar con n8n:", err);
+    console.error("❌ Error al conectar con n8n:", err);
     return new Response(
       JSON.stringify({
         error: "Error al conectar con n8n",
         detail: err.message,
       }),
-      { status: 500 }
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
     );
   }
-};
+}
