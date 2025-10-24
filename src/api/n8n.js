@@ -56,6 +56,7 @@ export default async function handler(req) {
       JSON.stringify({
         error: "Error al conectar con n8n",
         detail: err.message,
+        stack: err.stack,
       }),
       {
         status: 500,
