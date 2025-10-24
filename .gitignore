@@ -27,3 +27,4 @@ dist-ssr
 .env
 config.ts
 emails
+n8n.js

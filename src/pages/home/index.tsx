@@ -111,7 +111,7 @@ const Home = () => {
 
   const fetchData = async () => {
     try {
-      const response = await api.get("/dailyweird-json");
+      const response = await api.get("/n8n?path=dailyweird-json");
       const result = response.data.data?.[0];
       setData(result);
     } catch (error) {
