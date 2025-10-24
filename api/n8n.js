@@ -15,6 +15,9 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: "Server misconfiguration" });
   }
 
+  console.log("🌐 URL llamada:", `${N8N_BASE_URL}${path}`);
+  console.log("🔑 Token enviado:", N8N_TOKEN ? "sí" : "no");
+
   try {
     const response = await fetch(`${N8N_BASE_URL}/webhook/${path}`, {
       headers: {
