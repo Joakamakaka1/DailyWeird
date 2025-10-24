@@ -1,6 +1,6 @@
 import { gsap } from "gsap";
 import { useEffect, useRef, useState } from "react";
-import api from "../api/api";
+import api from "../../api/api";
 import supabase from "../db/supabaseClient";
 import type { EmailDailyWeird } from "../model/DailyWeird";
 

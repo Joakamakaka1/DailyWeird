@@ -4,7 +4,7 @@ import Lenis from "lenis";
 import "lenis/dist/lenis.css";
 import { useEffect, useRef, useState } from "react";
 import type { DailyWeird } from "../../model/DailyWeird";
-import api from "../../api/api";
+import api from "../../../api/api";
 import ItemModalImage from "../../components/itemModalImage";
 import EmailModalSubscribe from "../../components/emailModalSubscribe";
 
