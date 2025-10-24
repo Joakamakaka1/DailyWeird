@@ -16,6 +16,12 @@ export default async (req) => {
       { status: 500 }
     );
 
+  if (req.headers.get("user-agent")?.includes("PostmanRuntime")) {
+    return new Response(
+      JSON.stringify({ error: "Postman bloqueado por seguridad Vercel" }),
+      { status: 403 }
+    );
+  }
   try {
     const response = await fetch(`${N8N_BASE_URL}${path}`, {
       method: req.method,
