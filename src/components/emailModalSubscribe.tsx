@@ -94,7 +94,7 @@ const EmailModalSubscribe: React.FC<ModalProps> = ({ isOpen, onClose }) => {
         setIsLoading(true);
 
         try {
-          const response = await api.post("/dailyweird-send-email", {
+          const response = await api.post("/n8n?path=dailyweird-send-email", {
             created_at: new Date().toISOString(),
             email: userEmail,
             verified: true,

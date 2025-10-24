@@ -48,9 +48,12 @@ const EmailModalUnsubscribe = () => {
         setIsLoading(true);
 
         try {
-          const response = await api.delete("/dailyweird-delete-email", {
-            data: { email: userEmail },
-          });
+          const response = await api.delete(
+            "/n8n?path=dailyweird-delete-email",
+            {
+              data: { email: userEmail },
+            }
+          );
 
           if (response.data?.success === false) {
             const msg =
