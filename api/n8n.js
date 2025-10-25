@@ -36,7 +36,10 @@ export default async function handler(req, res) {
     const response = await fetch(finalUrl, {
       method: req.method,
       headers,
-      body: req.method === "GET" ? undefined : await req.text(),
+      body:
+        req.method === "GET" || req.method === "HEAD"
+          ? undefined
+          : JSON.stringify(req.body || {}),
     });
 
     // Si la respuesta no es OK, mostrar el cuerpo
