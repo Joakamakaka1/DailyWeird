@@ -44,12 +44,17 @@ export default async function handler(req, res) {
 
     // Si la respuesta no es OK, mostrar el cuerpo
     if (!response.ok) {
+      const contentType = response.headers.get("content-type");
+
+      // Si el error viene en JSON, pasar el error tal cual
+      if (contentType && contentType.includes("application/json")) {
+        const errorJson = await response.json();
+        return res.status(response.status).json(errorJson);
+      }
+
+      // Si no es JSON (texto plano o HTML)
       const text = await response.text();
-      return res.status(response.status).json({
-        error: "Error response",
-        status: response.status,
-        body: text,
-      });
+      return res.status(response.status).send(text);
     }
 
     // Intentar parsear el JSON (si existe)
