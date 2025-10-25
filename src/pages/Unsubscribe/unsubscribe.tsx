@@ -56,9 +56,7 @@ const EmailModalUnsubscribe = () => {
           );
 
           if (response.data?.success === false) {
-            const msg =
-              response.data?.error ||
-              "This email was not found in our list. Try again.";
+            const msg = "This email was not found in our list. Try again.";
             setErrorMessage(msg);
             setIsLoading(false);
             return;

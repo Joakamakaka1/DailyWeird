@@ -46,9 +46,9 @@ export default async function handler(req, res) {
     if (!response.ok) {
       const text = await response.text();
       return res.status(response.status).json({
-        error: text,
+        error: "Error response",
         status: response.status,
-        body: "Error response",
+        body: text,
       });
     }
 
