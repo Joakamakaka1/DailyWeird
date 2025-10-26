@@ -180,7 +180,7 @@ const DailyTop = () => {
 
         <p
           ref={heroDescriptionRef}
-          className="text-[#dbd8d3] text-base sm:text-lg font-roboto max-w-2xl mx-auto mb-6"
+          className="text-gray-400 text-base sm:text-lg font-roboto max-w-2xl mx-auto mb-6"
         >
           Discover the weirdest products and items curated daily to baffle your
           mind. From bizarre gadgets to peculiar food items, we bring you a
@@ -224,7 +224,7 @@ const DailyTop = () => {
           <h2 className="text-[42px] sm:text-[64px] font-bigbesty leading-tight mb-6">
             {data?.title || "Loading..."}
           </h2>
-          <p className="text-[#dbd8d3] text-base sm:text-lg font-roboto">
+          <p className="text-gray-400 text-base sm:text-lg font-roboto">
             {data?.description || "Loading..."}
           </p>
         </div>
@@ -253,7 +253,7 @@ const DailyTop = () => {
                 #{item.rank}{" "}
               </h3>{" "}
               <p className="text-white text-xl font-roboto">{item.name}</p>{" "}
-              <p className="text-[#dbd8d3] text-sm mt-2 font-roboto">
+              <p className="text-gray-400 text-sm mt-2 font-roboto">
                 {" "}
                 {item.description}{" "}
               </p>{" "}
@@ -269,7 +269,7 @@ const DailyTop = () => {
             Interested in more weirdness?
           </h3>
 
-          <p className="text-[#dbd8d3] text-lg sm:text-xl font-roboto max-w-2xl mx-auto mb-8 leading-relaxed">
+          <p className="text-gray-400 text-lg sm:text-xl font-roboto max-w-2xl mx-auto mb-8 leading-relaxed">
             Discover daily absurd products, deceptive food items, and objects
             that defy logic. Your daily dose of "why would someone do this?"
             awaits.

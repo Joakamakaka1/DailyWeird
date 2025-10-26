@@ -122,7 +122,7 @@ const Home = () => {
           <button
             ref={buttonRef}
             onClick={navigateToTop}
-            className="bg-[#c5ff75] text-white py-2 px-6 rounded-lg transition font-semibold cursor-pointer"
+            className="bg-[#c5ff75] text-black py-2 px-6 rounded-lg transition font-semibold cursor-pointer"
           >
             Read More
           </button>
