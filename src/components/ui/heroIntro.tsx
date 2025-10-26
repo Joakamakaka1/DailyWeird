@@ -6,7 +6,7 @@ const HeroIntro = () => {
   const titleRef = useRef<HTMLHeadingElement>(null);
   const subtitleMainRef = useRef<HTMLParagraphElement>(null);
   const subtitleSmallRef = useRef<HTMLParagraphElement>(null);
-  const arrowRef = useRef(null);
+  const arrowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!titleRef.current) return;
@@ -84,31 +84,28 @@ const HeroIntro = () => {
         Daily Weird
       </h1>
 
-      {/* === SUBS === */}
+      {/* === SUBS + ARROW === */}
       <div className="flex flex-col items-center mt-10 text-center sm:items-end sm:text-right sm:absolute sm:right-[15%] sm:top-[60%] sm:mt-0">
-        {" "}
         <p
           ref={subtitleMainRef}
           className="text-white text-lg sm:text-2xl uppercase tracking-widest font-roboto font-bold"
         >
-          {" "}
-          The weird, every day{" "}
-        </p>{" "}
+          The weird, every day
+        </p>
         <p
           ref={subtitleSmallRef}
           className="text-gray-400 text-xs sm:text-sm mt-3 uppercase tracking-widest font-roboto"
         >
-          {" "}
-          ©2025 - All rights reserved{" "}
-        </p>{" "}
-      </div>
+          ©2025 - All rights reserved
+        </p>
 
-      <div
-        ref={arrowRef}
-        className="absolute bottom-16 flex justify-center items-center text-[#c5ff75]"
-      >
-        {" "}
-        <ChevronDown size={40} strokeWidth={2.5} />{" "}
+        {/* === FLECHA === */}
+        <div
+          ref={arrowRef}
+          className="mt-10 flex justify-center items-center text-[#c5ff75]"
+        >
+          <ChevronDown size={40} strokeWidth={2.5} />
+        </div>
       </div>
     </section>
   );
