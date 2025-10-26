@@ -2,53 +2,26 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
-import { useEffect, useRef, useState } from "react";
-import type { DailyWeird } from "../../model/DailyWeird";
-import api from "../../../api/api";
-import ItemModalImage from "../../components/itemModalImage";
-import EmailModalSubscribe from "../../components/emailModalSubscribe";
+import { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import HeroIntro from "../../components/ui/heroIntro";
+import WeaklyTop from "../../components/ui/weaklyTop";
 
-// Registrar ScrollTrigger
 gsap.registerPlugin(ScrollTrigger);
 
 const Home = () => {
-  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
-  const numbersRef = useRef<(HTMLHeadingElement | null)[]>([]);
-  const heroTitleRef = useRef<HTMLHeadingElement>(null);
-  const heroDescriptionRef = useRef<HTMLParagraphElement>(null);
-  const stickyTitleRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
-  // ========= ANIMACIÓN HERO =========
-  useEffect(() => {
-    const tl = gsap.timeline();
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const subtitleRef = useRef<HTMLParagraphElement>(null);
+  const descRef = useRef<HTMLParagraphElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const statsRef = useRef<HTMLDivElement>(null);
 
-    tl.fromTo(
-      heroTitleRef.current,
-      { opacity: 0, y: 60 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 1.4,
-        ease: "power3.out",
-      }
-    );
-
-    tl.fromTo(
-      heroDescriptionRef.current,
-      { opacity: 0, y: 30 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 1.2,
-        ease: "power2.out",
-      },
-      "-=0.5"
-    );
-  }, []);
-
-  // ========= SCROLL + ANIMACIÓN DE ARTÍCULOS =========
+  // === Inicializar Lenis (scroll suave) ===
   useEffect(() => {
     const lenis = new Lenis({ duration: 1.2, smoothWheel: true });
+    lenis.on("scroll", ScrollTrigger.update);
 
     function raf(time: number) {
       lenis.raf(time);
@@ -56,297 +29,145 @@ const Home = () => {
     }
     requestAnimationFrame(raf);
 
-    // Configurar animaciones GSAP para cada artículo
-    cardsRef.current.forEach((card, idx) => {
-      if (!card) return;
-
-      gsap.set(card, { opacity: 0, y: 60 });
-
-      gsap.to(card, {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        ease: "power2.out",
-        delay: idx * 0.05, // pequeña cascada
-        scrollTrigger: {
-          trigger: card,
-          start: "top 85%",
-          end: "bottom 70%",
-          toggleActions: "play none none none",
-        },
-      });
-    });
-
     return () => {
       lenis.destroy();
       ScrollTrigger.getAll().forEach((t) => t.kill());
     };
   }, []);
 
-  // ========= EFECTOS HOVER =========
-  const handleCardEnter = (e: React.MouseEvent<HTMLDivElement>) => {
-    gsap.to(e.currentTarget, {
-      y: -5,
-      scale: 1.02,
-      boxShadow: "0 15px 30px rgba(197, 255, 117, 0.15)",
-      borderColor: "#c5ff75",
-      duration: 0.4,
-      ease: "power2.out",
-    });
-  };
-
-  const handleCardLeave = (e: React.MouseEvent<HTMLDivElement>) => {
-    gsap.to(e.currentTarget, {
-      y: 0,
-      scale: 1,
-      boxShadow: "none",
-      borderColor: "#7a7164/40",
-      duration: 0.4,
-      ease: "power2.out",
-    });
-  };
-
-  // ========= FETCH DE DATOS  =========
-  const [data, setData] = useState<DailyWeird | null>(null);
-
-  const fetchData = async () => {
-    try {
-      const response = await api.get("/n8n?path=dailyweird-json");
-      const result = response.data.data?.[0];
-      setData(result);
-    } catch (error) {
-      console.error("ERROR FETCH:", error);
-    }
-  };
-
   useEffect(() => {
-    fetchData();
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: ".home-hero-section",
+          start: "top 80%",
+          toggleActions: "play none none reverse",
+        },
+      });
+
+      tl.fromTo(
+        titleRef.current,
+        { opacity: 0, y: 60 },
+        { opacity: 1, y: 0, duration: 1.2, ease: "power3.out" }
+      )
+        .fromTo(
+          subtitleRef.current,
+          { opacity: 0, y: 30 },
+          { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" },
+          "-=0.6"
+        )
+        .fromTo(
+          descRef.current,
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 1, ease: "power2.out" },
+          "-=0.4"
+        )
+        // Botón y estadísticas animan simultáneamente
+        .addLabel("buttonAndStats")
+        .fromTo(
+          buttonRef.current,
+          { opacity: 0, scale: 1 },
+          { opacity: 1, scale: 1, duration: 0.3, ease: "power2.out" },
+          "buttonAndStats"
+        )
+        .fromTo(
+          statsRef.current?.querySelectorAll(".stat-item")!,
+          { opacity: 0, y: 80 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power4.out",
+            stagger: 0.1,
+          },
+          "buttonAndStats"
+        );
+    });
+
+    return () => ctx.revert();
   }, []);
 
-  // ========= MODAL IMAGE =========
-  const [selectedItem, setSelectedItem] = useState<{
-    name: string;
-    image_url: string;
-  } | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleOpenModal = (item: { name: string; image_url: string }) => {
-    setSelectedItem(item);
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedItem(null);
-  };
-
-  // ========= MODAL SUBSCRIBE FORM =========
-  const [isSubscribeModalOpen, setIsSubscribeModalOpen] = useState(false);
-
-  const handleOpenSubscribeModal = () => {
-    setIsSubscribeModalOpen(true);
-  };
-
-  const handleCloseSubscribeModal = () => {
-    setIsSubscribeModalOpen(false);
-  };
-
-  // ========= SHARING =========
-
-  const [shareText, setShareText] = useState("Share weirdness");
-
-  const handleShare = async () => {
-    const shareData = {
-      title: "Daily Weird",
-      text: "Discover the weirdest products and items curated daily!",
-      url: window.location.origin,
-    };
-
-    if (navigator.share) {
-      try {
-        await navigator.share(shareData);
-      } catch (err) {
-        console.error("Error sharing:", err);
-      }
-    } else {
-      try {
-        await navigator.clipboard.writeText(shareData.url);
-        setShareText("Copied!");
-      } catch (err) {
-        console.error("Failed to copy link:", err);
-        setShareText("Error");
-      }
-    }
+  const navigateToTop = () => {
+    navigate("/dailyWeirdTop");
   };
 
   return (
-    <main className="w-full mx-auto px-4 sm:px-8 pb-10 bg-[#131516] min-h-screen text-white">
-      {/* ========== HEADER ========== */}
-      <header className="w-full max-w-[1500px] flex items-center py-6 mx-auto">
-        <img src="/images/Logo2.webp" alt="" className="w-18 mb-4 mr-4" />
-        <h1
-          className="text-white text-2xl sm:text-3xl pb-2 font-bigbesty"
-          style={{ borderBottom: "3px solid #aaff00" }}
-        >
-          Daily Weird
-        </h1>
-      </header>
+    <main className="w-full min-h-screen bg-[#131516]">
+      <HeroIntro />
 
-      {/* ========== HERO SECTION ========== */}
-      <section className="w-full text-center mt-16 mb-10 px-4 py-4">
-        <h2
-          ref={heroTitleRef}
-          className="text-white text-[42px] sm:text-[58px] font-bigbesty leading-tight mb-10"
-        >
-          {data?.title}
-        </h2>
+      <div className="h-[230px] lg:h-[290px]" />
 
-        <p
-          ref={heroDescriptionRef}
-          className="text-[#dbd8d3] text-base sm:text-lg font-roboto max-w-2xl mx-auto mb-6"
-        >
-          Discover the weirdest products and items curated daily to baffle your
-          mind. From bizarre gadgets to peculiar food items, we bring you a
-          daily dose of the unusual and extraordinary.
-        </p>
+      <section className="home-hero-section w-full flex flex-col lg:flex-row items-center justify-center max-w-[1500px] mx-auto lg:pt-6 not-first:pl-6 text-center lg:text-left overflow-hidden">
+        <div className="lg:w-1/2 w-full space-y-5 mt-5 px-4">
+          <h1
+            ref={titleRef}
+            className="text-4xl sm:text-5xl font-bold leading-tight font-bigbesty"
+          >
+            Your top 10 Daily Weird
+          </h1>
 
-        <div className="relative w-full max-w-3xl mx-auto aspect-video rounded-3xl overflow-hidden border border-gray-200 shadow-md bg-[#1e2021]">
-          {/* Loader centrado */}
-          {!data?.image_url && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-[#c5ff75] font-roboto animate-pulse">
-              <div className="w-10 h-10 border-4 border-[#c5ff75]/40 border-t-[#c5ff75] rounded-full animate-spin mb-3"></div>
-              <p className="text-xl font-bigbesty">Loading image...</p>
+          <p ref={subtitleRef} className="text-gray-400 text-sm">
+            {new Date().toLocaleDateString()} | by DailyWeird
+          </p>
+
+          <p
+            ref={descRef}
+            className="text-gray-300 text-base sm:text-lg font-roboto max-w-lg mx-auto lg:mx-0"
+          >
+            In DailyWeird we present you the top 10 weird things of the day. We
+            use AI to generate the top 10 weird things of the day. Maybe you
+            should check it out.
+          </p>
+
+          <button
+            ref={buttonRef}
+            onClick={navigateToTop}
+            className="bg-[#c5ff75] text-white py-2 px-6 rounded-lg transition font-semibold cursor-pointer"
+          >
+            Read More
+          </button>
+
+          <div
+            ref={statsRef}
+            className="mt-5 flex justify-center lg:justify-start gap-8 text-gray-300"
+          >
+            <div className="stat-item flex flex-col items-center lg:items-start">
+              <span className="text-3xl font-bold text-[#c5ff75]">250+</span>
+              <span className="text-sm uppercase tracking-widest text-gray-400">
+                Articles
+              </span>
             </div>
-          )}
 
-          {data?.image_url && (
+            <div className="stat-item flex flex-col items-center lg:items-start">
+              <span className="text-3xl font-bold text-[#c5ff75]">20K</span>
+              <span className="text-sm uppercase tracking-widest text-gray-400">
+                Readers
+              </span>
+            </div>
+
+            <div className="stat-item flex flex-col items-center lg:items-start">
+              <span className="text-3xl font-bold text-[#c5ff75]">100%</span>
+              <span className="text-sm uppercase tracking-widest text-gray-400 pl-1">
+                Random
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="lg:w-1/2 flex justify-center mt-15 lg:mt-0">
+          <div className="relative rounded-2xl overflow-hidden">
             <img
-              src={data.image_url}
-              alt="Foto Random"
-              className="w-full h-full object-cover transition-opacity duration-700 opacity-0"
-              onLoad={(e) => {
-                const img = e.currentTarget;
-                gsap.to(img, { opacity: 1, duration: 0.8, ease: "power2.out" });
-              }}
-              loading="eager"
-              decoding="async"
-              fetchPriority="high"
+              src="/images/Logo2.webp"
+              alt="Daily Weird logo"
+              className="w-[410px] object-cover rounded-2xl shadow-lg"
             />
-          )}
-        </div>
-      </section>
-
-      {/* ========== SECCIÓN STICKY + SCROLL ========== */}
-      <section className="relative w-full max-w-[1500px] mx-auto flex flex-col lg:flex-row gap-20 lg:gap-32 mt-36">
-        {/* Título sticky */}
-        <div
-          ref={stickyTitleRef}
-          className="lg:sticky lg:top-80 lg:self-start lg:w-1/3 h-fit pl-6"
-          style={{ borderLeft: "3px solid #aaff00" }}
-        >
-          <h2 className="text-[42px] sm:text-[64px] font-bigbesty leading-tight mb-6">
-            {data?.title}
-          </h2>
-          <p className="text-[#dbd8d3] text-base sm:text-lg font-roboto">
-            {data?.description}
-          </p>
-        </div>
-
-        {/* Lista de artículos - aparecen uno a uno */}
-        <div className="lg:w-2/3 flex flex-col gap-12">
-          {data?.items?.map((item, idx) => (
-            <article
-              key={idx}
-              ref={(el: HTMLDivElement | null) => {
-                if (el) cardsRef.current[idx] = el;
-              }}
-              onClick={() => handleOpenModal(item)}
-              onMouseEnter={handleCardEnter}
-              onMouseLeave={handleCardLeave}
-              className="bg-[#1e2021] border border-[#7a7164]/40 p-8 rounded-2xl shadow-sm cursor-pointer hover:border-[#c5ff75]/60 transition-all"
-            >
-              {" "}
-              <h3
-                ref={(el: HTMLHeadingElement | null) => {
-                  if (el) numbersRef.current[idx] = el;
-                }}
-                className="text-[#c5ff75] font-roboto text-sm mb-1"
-              >
-                {" "}
-                #{item.rank}{" "}
-              </h3>{" "}
-              <p className="text-white text-xl font-roboto">{item.name}</p>{" "}
-              <p className="text-[#dbd8d3] text-sm mt-2 font-roboto">
-                {" "}
-                {item.description}{" "}
-              </p>{" "}
-            </article>
-          ))}
-        </div>
-      </section>
-
-      {/* ========== SECCIÓN FINAL ========== */}
-      <section className="w-full max-w-[1500px] mx-auto mt-30 text-center">
-        <div className="bg-gradient-to-r from-[#1e2021] to-[#2a2d2e] border border-[#7a7164]/40 p-12 rounded-2xl shadow-lg">
-          <h3 className="text-white text-2xl sm:text-3xl font-bigbesty mb-6">
-            Interested in more weirdness?
-          </h3>
-
-          <p className="text-[#dbd8d3] text-lg sm:text-xl font-roboto max-w-2xl mx-auto mb-8 leading-relaxed">
-            Discover daily absurd products, deceptive food items, and objects
-            that defy logic. Your daily dose of "why would someone do this?"
-            awaits.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
-            <button
-              className="cursor-pointer bg-[#c5ff75] text-[#131516] px-8 py-3 rounded-lg font-roboto font-semibold shadow-lg"
-              onClick={handleOpenSubscribeModal}
-            >
-              Subscribe to the weirdness
-            </button>
-            <button
-              onClick={handleShare}
-              className="cursor-pointer border border-[#c5ff75] text-[#c5ff75] px-8 py-3 rounded-lg font-roboto font-semibold hover:bg-[#c5ff75] hover:text-[#131516] transition-all duration-300"
-            >
-              {shareText}
-            </button>
-          </div>
-
-          <div className="flex justify-center gap-6 mt-8">
-            <span className="text-[#7a7164] font-roboto text-sm flex items-center gap-2">
-              <span className="w-2 h-2 bg-[#c5ff75] rounded-full"></span>
-              New weirdness every day
-            </span>
-            <span className="text-[#7a7164] font-roboto text-sm flex items-center gap-2">
-              <span className="w-2 h-2 bg-[#c5ff75] rounded-full"></span>
-              100% not in common sense
-            </span>
           </div>
         </div>
       </section>
 
-      {/* ========== FOOTER ========== */}
-      <footer className="w-full max-w-[1500px] mx-auto mt-20 flex flex-col items-center gap-4">
-        <p className="text-xs text-[#c5ff75] font-roboto">
-          © {new Date().getFullYear()} DailyWeird.top — All the weird, every
-          day.
-        </p>
-      </footer>
+      <div className="h-[230px] lg:h-[290px]" />
 
-      {isModalOpen && selectedItem && (
-        <ItemModalImage
-          isOpen={isModalOpen}
-          onClose={handleCloseModal}
-          title={selectedItem.name}
-          imageUrl={selectedItem.image_url}
-        />
-      )}
-
-      <EmailModalSubscribe
-        isOpen={isSubscribeModalOpen}
-        onClose={handleCloseSubscribeModal}
-      />
+      <WeaklyTop />
     </main>
   );
 };

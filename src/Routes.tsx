@@ -4,6 +4,7 @@ import HomePage from "./pages/home";
 import NotFound from "./pages/404/404";
 import EmailModalUnsubscribe from "./pages/Unsubscribe/unsubscribe";
 import AuthCallback from "./auth/callback";
+import DailyTop from "./pages/DailyTop/dailyTop";
 
 const AppRoutes = () => {
   return (
@@ -13,6 +14,7 @@ const AppRoutes = () => {
         <Route path="*" element={<NotFound />} />
         <Route path="/unsubscribe" element={<EmailModalUnsubscribe />} />
         <Route path="/auth/callback" element={<AuthCallback />} />
+        <Route path="/dailyWeirdTop" element={<DailyTop />} />
       </Routes>
     </Router>
   );
