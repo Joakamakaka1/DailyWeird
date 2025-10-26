@@ -187,7 +187,7 @@ const DailyTop = () => {
           daily dose of the unusual and extraordinary.
         </p>
 
-        <div className="relative w-full max-w-3xl mx-auto aspect-video rounded-3xl overflow-hidden border border-gray-200 shadow-md bg-[#1e2021]">
+        <div className="relative w-full max-w-3xl mx-auto aspect-video rounded-3xl overflow-hidden border border-gray-200 shadow-md bg-[#151515]">
           {/* Loader centrado */}
           {!data?.image_url && (
             <div className="absolute inset-0 flex flex-col items-center justify-center text-[#c5ff75] font-roboto animate-pulse">
@@ -240,7 +240,7 @@ const DailyTop = () => {
               onClick={() => handleOpenModal(item)}
               onMouseEnter={handleCardEnter}
               onMouseLeave={handleCardLeave}
-              className="bg-[#1e2021] border border-[#7a7164]/40 p-8 rounded-2xl shadow-sm cursor-pointer hover:border-[#c5ff75]/60 transition-all"
+              className="bg-[#151515] border border-[#7a7164]/40 p-8 rounded-2xl shadow-sm cursor-pointer hover:border-[#c5ff75]/60 transition-all"
             >
               {" "}
               <h3
