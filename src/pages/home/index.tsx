@@ -112,7 +112,7 @@ const Home = () => {
 
           <p
             ref={descRef}
-            className="text-gray-300 text-base sm:text-lg font-roboto max-w-lg mx-auto lg:mx-0"
+            className="text-gray-400 text-base sm:text-lg font-roboto max-w-lg mx-auto lg:mx-0"
           >
             In DailyWeird we present you the top 10 weird things of the day. We
             use AI to generate the top 10 weird things of the day. Maybe you
