@@ -101,7 +101,7 @@ const Home = () => {
         <div className="lg:w-1/2 w-full space-y-5 mt-5 px-4">
           <h1
             ref={titleRef}
-            className="text-4xl sm:text-5xl font-bold leading-tight font-bigbesty"
+            className="text-white text-4xl sm:text-5xl font-bold leading-tight font-bigbesty"
           >
             Your top 10 Daily Weird
           </h1>

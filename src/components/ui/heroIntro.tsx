@@ -105,7 +105,7 @@ const HeroIntro = () => {
 
       <div
         ref={arrowRef}
-        className="absolute bottom-10 flex justify-center items-center text-[#c5ff75]"
+        className="absolute bottom-16 flex justify-center items-center text-[#c5ff75]"
       >
         {" "}
         <ChevronDown size={40} strokeWidth={2.5} />{" "}
