@@ -273,8 +273,8 @@ const WeaklyTop: React.FC = () => {
             }
             className={
               isDesktop
-                ? "bg-[#151515] border border-gray-800 rounded-2xl overflow-hidden shadow-lg cursor-pointer transform-gpu flex flex-col min-w-[360px] md:min-w-[400px] h-[440px]"
-                : "snap-start bg-[#151515] border border-gray-800 rounded-2xl overflow-hidden shadow-lg cursor-pointer transform-gpu flex flex-col w-full max-w-[600px] mx-auto"
+                ? "bg-gradient-to-r from-[#1e2021] to-[#2a2d2e] border border-[#7a7164]/40 rounded-2xl overflow-hidden shadow-lg cursor-pointer transform-gpu flex flex-col min-w-[360px] md:min-w-[400px] h-[440px]"
+                : "snap-start bg-[#151515] border border-[#7a7164]/40 rounded-2xl overflow-hidden shadow-lg cursor-pointer transform-gpu flex flex-col w-full max-w-[600px] mx-auto"
             }
           >
             {/* Image */}
@@ -297,7 +297,7 @@ const WeaklyTop: React.FC = () => {
                 </p>
               </div>
 
-              <div className="flex justify-between items-center text-sm text-gray-500 mt-4">
+              <div className="flex justify-between items-center text-sm text-gray-400 mt-4">
                 <button
                   onClick={navigateToTheTop}
                   className="text-[#c5ff75] hover:underline flex items-center gap-1 cursor-pointer"

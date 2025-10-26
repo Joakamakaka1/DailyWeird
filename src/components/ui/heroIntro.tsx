@@ -99,7 +99,7 @@ const HeroIntro = () => {
           ©2025 - All rights reserved
         </p>
 
-        {/* === FLECHA === */}
+        {/* === ARROW === */}
         <div
           ref={arrowRef}
           className="mt-10 flex justify-center items-center text-[#c5ff75]"
