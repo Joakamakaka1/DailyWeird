@@ -98,14 +98,13 @@ const HeroIntro = () => {
         >
           ©2025 - All rights reserved
         </p>
-
-        {/* === ARROW === */}
-        <div
-          ref={arrowRef}
-          className="mt-10 flex justify-center items-center text-[#c5ff75]"
-        >
-          <ChevronDown size={40} strokeWidth={2.5} />
-        </div>
+      </div>
+      {/* === ARROW === */}
+      <div
+        ref={arrowRef}
+        className="mt-10 flex justify-center items-center text-[#c5ff75]"
+      >
+        <ChevronDown size={40} strokeWidth={2.5} />
       </div>
     </section>
   );

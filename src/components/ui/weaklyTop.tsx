@@ -4,71 +4,14 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
 import { useNavigate } from "react-router-dom";
+import type { DailyWeird } from "../../model/DailyWeird";
+import api from "../../../api/api";
 
 gsap.registerPlugin(ScrollTrigger);
 
-interface TopicCard {
-  id: number;
-  title: string;
-  description: string;
-  image: string;
-  posted: string;
-}
-
-const topics: TopicCard[] = [
-  {
-    id: 1,
-    title: "Coming soon...",
-    description: "Coming soon...",
-    image: "/images/Logo2.webp",
-    posted: "2 hours ago",
-  },
-  {
-    id: 2,
-    title: "Coming soon...",
-    description: "Coming soon...",
-    image: "/images/Logo2.webp",
-    posted: "2 hours ago",
-  },
-  {
-    id: 3,
-    title: "Coming soon...",
-    description: "Coming soon...",
-    image: "/images/Logo2.webp",
-    posted: "2 hours ago",
-  },
-  {
-    id: 4,
-    title: "Coming soon...",
-    description: "Coming soon...",
-    image: "/images/Logo2.webp",
-    posted: "2 hours ago",
-  },
-  {
-    id: 5,
-    title: "Coming soon...",
-    description: "Coming soon...",
-    image: "/images/Logo2.webp",
-    posted: "2 hours ago",
-  },
-  {
-    id: 6,
-    title: "Coming soon...",
-    description: "Coming soon...",
-    image: "/images/Logo2.webp",
-    posted: "2 hours ago",
-  },
-  {
-    id: 7,
-    title: "Coming soon...",
-    description: "Coming soon...",
-    image: "/images/Logo2.webp",
-    posted: "2 hours ago",
-  },
-];
-
 const WeaklyTop: React.FC = () => {
   const navigate = useNavigate();
+  const [weeklyJsons, setWeeklyJsons] = useState<DailyWeird[] | null>([]);
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
@@ -76,6 +19,21 @@ const WeaklyTop: React.FC = () => {
   const [isDesktop, setIsDesktop] = useState<boolean>(
     () => window.innerWidth >= 1024
   );
+
+  const fetchWeeklyJsons = async () => {
+    try {
+      const response = await api.get("/n8n?path=dailyweird-json");
+      console.log("RESPONSE:", response.data);
+      const result = response.data.data;
+      setWeeklyJsons(result);
+    } catch (error) {
+      console.error("ERROR FETCH:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchWeeklyJsons();
+  });
 
   // === Lenis (smooth scroll global) ===
   useEffect(() => {
@@ -255,7 +213,7 @@ const WeaklyTop: React.FC = () => {
             : { scrollSnapType: "y mandatory" }
         }
       >
-        {topics.map((topic, i) => (
+        {weeklyJsons?.map((topic, i) => (
           <div
             key={topic.id}
             ref={(el) => {
@@ -280,7 +238,7 @@ const WeaklyTop: React.FC = () => {
             {/* Image */}
             <div className="relative overflow-hidden">
               <img
-                src={topic.image}
+                src={topic.image_url}
                 alt={topic.title}
                 className="w-full h-52 sm:h-60 object-cover transition-transform duration-700 hover:scale-110"
               />
@@ -304,7 +262,7 @@ const WeaklyTop: React.FC = () => {
                 >
                   Read →
                 </button>
-                <span className="text-xs">{topic.posted}</span>
+                <span className="text-xs">{topic.date}</span>
               </div>
             </div>
           </div>
