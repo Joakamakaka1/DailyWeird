@@ -181,6 +181,10 @@ const WeaklyTop: React.FC = () => {
 
   const navigateToTheTop = () => navigate("/dailyWeirdTop");
 
+  const navigateToTheWeeklyTop = (date: string) => {
+    navigate(`/dailyWeirdTop?date=${encodeURIComponent(date)}`);
+  };
+
   return (
     <section
       ref={sectionRef}
@@ -258,7 +262,7 @@ const WeaklyTop: React.FC = () => {
 
               <div className="flex justify-between items-center text-sm text-gray-400 mt-4">
                 <button
-                  onClick={navigateToTheTop}
+                  onClick={() => navigateToTheWeeklyTop(topic.date)}
                   className="text-[#c5ff75] hover:underline flex items-center gap-1 cursor-pointer"
                 >
                   Read →
