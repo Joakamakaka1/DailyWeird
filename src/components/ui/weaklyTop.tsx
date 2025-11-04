@@ -24,7 +24,7 @@ const WeaklyTop: React.FC = () => {
     try {
       const response = await api.get("/n8n?path=dailyweird-json");
       console.log("RESPONSE:", response.data);
-      const result = response.data.data;
+      const result = response.data?.results?.[0]?.data ?? [];
       setWeeklyJsons(result);
     } catch (error) {
       console.error("ERROR FETCH:", error);
@@ -33,7 +33,7 @@ const WeaklyTop: React.FC = () => {
 
   useEffect(() => {
     fetchWeeklyJsons();
-  });
+  }, []);
 
   // === Lenis (smooth scroll global) ===
   useEffect(() => {
