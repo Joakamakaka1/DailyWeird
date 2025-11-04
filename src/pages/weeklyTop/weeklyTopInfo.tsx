@@ -26,7 +26,7 @@ const WeeklyTopInfo = () => {
   const fetchDailyWeirdByDate = async () => {
     try {
       const response = await api.get(
-        `/a613fd6d-6c93-4f42-9ea4-e666aedb6efa/dailyweird-json/${date}`
+        `/n8n?path=a613fd6d-6c93-4f42-9ea4-e666aedb6efa/dailyweird-json/${date}`
       );
       const result = response.data.data?.[0];
       setData(result);
@@ -195,7 +195,6 @@ const WeeklyTopInfo = () => {
           ref={heroTitleRef}
           className="text-white text-[40px] sm:text-[50px] font-bigbesty leading-tight mb-10 max-w-4xl mx-auto"
         >
-          Prueba
           {data?.title || "Loading..."}
         </h2>
 
