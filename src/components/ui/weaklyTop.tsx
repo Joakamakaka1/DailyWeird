@@ -180,7 +180,7 @@ const WeaklyTop: React.FC = () => {
   };
 
   const navigateToTheWeeklyTop = (date: string) => {
-    navigate(`/dailyWeirdTop?date=${encodeURIComponent(date)}`);
+    navigate(`/dailyWeirdTop/${encodeURIComponent(date)}`);
   };
 
   return (
