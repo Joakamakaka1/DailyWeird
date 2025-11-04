@@ -22,7 +22,7 @@ const WeaklyTop: React.FC = () => {
 
   const fetchWeeklyJsons = async () => {
     try {
-      const response = await api.get("/n8n?path=dailyweird-json");
+      const response = await api.get("/n8n?path=weekly-json");
       const result = response.data?.results?.[0]?.data ?? [];
       setWeeklyJsons(result);
     } catch (error) {
