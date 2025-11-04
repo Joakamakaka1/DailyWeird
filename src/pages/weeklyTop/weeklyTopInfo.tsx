@@ -195,6 +195,7 @@ const WeeklyTopInfo = () => {
           ref={heroTitleRef}
           className="text-white text-[40px] sm:text-[50px] font-bigbesty leading-tight mb-10 max-w-4xl mx-auto"
         >
+          Prueba
           {data?.title || "Loading..."}
         </h2>
 
