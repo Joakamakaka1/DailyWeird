@@ -20,13 +20,13 @@ const Home = () => {
 
   // === Inicializar Lenis (scroll suave) ===
   useEffect(() => {
-    const lenis = new Lenis({ duration: 1.2, smoothWheel: true });
+    const lenis = new Lenis({ duration: 1.3, smoothWheel: true });
     lenis.on("scroll", ScrollTrigger.update);
 
-    function raf(time: number) {
+    const raf = (time: number) => {
       lenis.raf(time);
       requestAnimationFrame(raf);
-    }
+    };
     requestAnimationFrame(raf);
 
     return () => {
