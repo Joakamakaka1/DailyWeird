@@ -1,11 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Lenis from "lenis";
 import "lenis/dist/lenis.css";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import type { DailyWeird } from "../../model/DailyWeird";
 import api from "../../../api/api";
+import type { DailyWeird } from "../../model/DailyWeird";
 
 gsap.registerPlugin(ScrollTrigger);
 
