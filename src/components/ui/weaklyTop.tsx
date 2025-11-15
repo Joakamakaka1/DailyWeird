@@ -5,6 +5,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/api";
 import type { DailyWeird } from "../../model/DailyWeird";
+import Lenis from "lenis";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -35,6 +36,18 @@ const WeaklyTop: React.FC = () => {
     fetchWeeklyJsons();
   }, []);
 
+  // === Lenis (smooth scroll global) ===
+  useEffect(() => {
+    const lenis = new Lenis({ duration: 1.3, smoothWheel: true });
+    const raf = (time: number) => {
+      lenis.raf(time);
+      ScrollTrigger.update();
+      requestAnimationFrame(raf);
+    };
+    requestAnimationFrame(raf);
+    return () => lenis.destroy();
+  }, []);
+
   // === Detect screen width ===
   useEffect(() => {
     const handleResize = () => {
@@ -52,8 +65,7 @@ const WeaklyTop: React.FC = () => {
     const track = containerRef.current;
     if (!section || !track) return;
 
-    ScrollTrigger.getById("horizontal-scroll")?.kill();
-
+    ScrollTrigger.getAll().forEach((t) => t.kill());
     if (scrollTweenRef.current) {
       scrollTweenRef.current.kill();
       scrollTweenRef.current = null;
@@ -78,7 +90,6 @@ const WeaklyTop: React.FC = () => {
       x: -scrollDistance,
       ease: "none",
       scrollTrigger: {
-        id: "horizontal-scroll",
         trigger: section,
         start: "top top",
         end: () => `+=${scrollDistance}`,
@@ -100,8 +111,7 @@ const WeaklyTop: React.FC = () => {
         scrollTweenRef.current.kill();
         scrollTweenRef.current = null;
       }
-      ScrollTrigger.getById("horizontal-scroll")?.kill();
-
+      ScrollTrigger.getAll().forEach((t) => t.kill());
       if (containerRef.current) gsap.set(containerRef.current, { x: 0 });
     }
 
@@ -113,7 +123,7 @@ const WeaklyTop: React.FC = () => {
         scrollTweenRef.current.kill();
         scrollTweenRef.current = null;
       }
-      ScrollTrigger.getById("horizontal-scroll")?.kill();
+      ScrollTrigger.getAll().forEach((t) => t.kill());
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDesktop]);
