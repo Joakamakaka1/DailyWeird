@@ -103,6 +103,8 @@ const WeaklyTop: React.FC = () => {
 
   // === Initialize / clean GSAP scroll ===
   useEffect(() => {
+    if (!weeklyJsons || weeklyJsons.length === 0) return;
+
     if (isDesktop) {
       buildHorizontalScroll();
     } else {
@@ -126,7 +128,7 @@ const WeaklyTop: React.FC = () => {
       ScrollTrigger.getAll().forEach((t) => t.kill());
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isDesktop]);
+  }, [isDesktop, weeklyJsons]);
 
   // === Subtle entrance animation (desktop only) ===
   useEffect(() => {
